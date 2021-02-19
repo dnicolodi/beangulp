@@ -9,7 +9,7 @@ from beancount.core import data
 from beancount.parser import cmptest
 from beancount.utils import test_utils
 from beangulp import cache
-from beangulp.importers import csv_importer as csvimp
+from beangulp.importers import csv as csvimp
 
 
 Col = csvimp.Col
