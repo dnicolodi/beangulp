@@ -6,6 +6,7 @@ def load_tests(loader, tests, pattern):
     suite = unittest.TestSuite()
     suite.addTest(
         doctest.DocFileSuite(
+            'extract.rst',
             'filing.rst',
             'identify.rst',
             'testing.rst',
