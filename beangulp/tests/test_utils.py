@@ -18,7 +18,7 @@ class TestWalk(unittest.TestCase):
     def test_walk_empty(self):
         entries = walk([self.temp])
         self.assertListEqual(list(entries), [])
-        
+
     def test_walk_simple(self):
         filenames = [path.join(self.temp, name) for name in ('z', 'a', 'b')]
         for filename in filenames:
