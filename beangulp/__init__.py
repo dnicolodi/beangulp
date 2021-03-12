@@ -19,7 +19,7 @@ from beancount import loader
 from beangulp import cache
 from beangulp import exceptions
 from beangulp import extract
-from beangulp import file
+from beangulp import filing
 from beangulp import identify
 from beangulp import importer
 from beangulp import utils
@@ -150,7 +150,7 @@ def _file(ctx, src, destination, dry_run, overwrite, failfast):
                 log('') # Newline.
                 continue
 
-            destpath = file.filepath(importer, filename)
+            destpath = filing.filepath(importer, filename)
 
             # Prepend destination directory path.
             destpath = os.path.join(destination, destpath)
@@ -178,7 +178,7 @@ def _file(ctx, src, destination, dry_run, overwrite, failfast):
 
     if not dry_run:
         for src, dst in renames:
-            file.move(src, dst)
+            filing.move(src, dst)
 
 
 @click.command('identify')
