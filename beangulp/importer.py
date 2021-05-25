@@ -24,9 +24,10 @@ compare = similar.SimilarityComparator()
 class Importer(abc.ABC):
     """Interface that all source importers need to comply with.
 
-    The interface is defined as an abstract base class implementing
-    base behavior for all importers. Importer implementations need to
-    provide at least the identify() and account() methods.
+    All importers must adhere to this interface. This class provides a
+    default implementation for some of the methods. Importers need to
+    define at least the :py:meth:`identify()` and :py:meth:`account()`
+    methods.
 
     """
 
@@ -36,8 +37,9 @@ class Importer(abc.ABC):
 
         The name is used to identify the importer in the command line
         interface. Conventionally this is a dotted string containing
-        the module and name of the class, however a specific format is
-        not enforced.
+        the module and name of the class, and this is what is returned
+        if this property is not overrided in a subclass, however a
+        specific format is not enforced.
 
         """
         return f'{self.__class__.__module__}.{self.__class__.__name__}'
@@ -129,8 +131,9 @@ class Importer(abc.ABC):
     def cmp(a: data.Directive, b: data.Directive) -> bool:
         """Compare two entries.
 
-        This function is used by the deduplicate() method to determine
-        if two entries are similar enough to be considered duplicates.
+        This function is used by the :py:meth:`deduplicate()` method
+        to determine if two entries are similar enough to be
+        considered duplicates.
 
         Args:
           a: First entry.
@@ -148,11 +151,11 @@ class Importer(abc.ABC):
     def deduplicate(self, entries: data.Entries, existing: data.Entries) -> data.Entries:
         """Mark duplicates in extracted entries.
 
-        The default implementation uses the cmp() method to compare
-        each newly extracted entries to the existing entries. Only
-        existing entries dated within a 5 days window around the date
-        of the each existing entry (two days prior and two days past)
-        are considered.
+        The default implementation uses the :py:meth:`cmp()` method to
+        compare each newly extracted entries to the existing
+        entries. Only existing entries dated within a 5 days window
+        around the date of the each existing entry (two days prior and
+        two days past) are considered.
 
         Args:
           entries: Entries extracted from the document being processed.
@@ -160,7 +163,7 @@ class Importer(abc.ABC):
 
         Returns:
           A new list of entries where duplicates have been marked
-          setting the "__duplicate__" entry metadata field to True.
+          setting the ``__duplicate__`` entry metadata field to True.
 
         """
         window = datetime.timedelta(days=2)
@@ -173,7 +176,7 @@ class Importer(abc.ABC):
         to sort in descending order. Importers can implement this
         method to have entries serialized to file in a specific
         order. The default implementation sorts the entries according
-        to beancount.core.data.entry_sortkey().
+        to :py:func:`beancount.core.data.entry_sortkey()`.
 
         Args:
           entries: Entries list to sort.

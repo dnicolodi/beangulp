@@ -108,7 +108,7 @@ class Date(Column):
 
     Parse strings into datetime.date objects accordingly to the
     provided format specification. The format specification is the
-    same understood by datetime.datetime.strptime().
+    same understood by :py:meth:`datetime.datetime.strptime()`.
 
     Args:
       name: Column name or index.
@@ -126,16 +126,17 @@ class Date(Column):
 class Amount(Column):
     """Specialized Column descriptor for decimal fields.
 
-    Parse strings into decimal.Decimal objects. Optionally apply
-    regexp substitutions before parsing the decimal number. This
-    allows to normalize locale formatted decimal numbers into the
-    format expected by decimal.Decimal().
+    Parse strings into :py:class:`~decimal.Decimal` objects.
+    Optionally apply regexp substitutions before parsing the decimal
+    number. This allows to normalize locale formatted decimal numbers
+    into the format expected by the :py:class:`decimal.Decimal`
+    constructor.
 
     Args:
       name: Column name or index.
       subs: Dictionary mapping regular expression patterns to
         replacement strings. Substitutions are performed with
-        re.sub() in the order they are specified.
+        :py:func:`re.sub()` in the order they are specified.
 
     """
 
@@ -250,26 +251,35 @@ class Importer(beangulp.Importer, CSVReader):
         self.flag = flag
 
     def date(self, filepath):
-        """Implement beangulp.Importer::date()"""
+        """Implements :py:meth:`beangulp.Importer.date()`.
+
+        Returns the latest transaction date in the input file.
+
+        """
         return max(row.date for row in self.read(filepath))
 
     def account(self, filepath):
-        """Implement beangulp.Importer::account()"""
+        """Implements :py:meth:`beangulp.Importer.account()`.
+
+        Returns the account name specified to the constructor.
+
+        """
         return self.importer_account
 
     def extract(self, filepath, existing):
-        """Implement beangulp.Importer::extract()
+        """Implements :py:meth:`beangulp.Importer.extract()`.
 
         This methods costructs a transaction for each data row using
         the date, narration, and amount required fields and the flag,
         payee, account, currency, tag, link, balance optional fields.
 
-        Transaction metadata is constructed with the metadata() method
-        and the finalize() method is called on each transaction. These
+        Transaction metadata is constructed with :py:meth:`metadata()`
+        and :py:meth:`finalize()` is called on each transaction. These
         can be redefine in subclasses. For customization that cannot
         be implemented with these two extension points, consider
-        basing the importer on the CSVReader class and implement
-        tailored data processing in the extract() method.
+        basing the importer on :py:class:`CSVReader` and implementing
+        the :py:class:`~beangulp.Importer` interface with tailored
+        processing of the data rows.
 
         """
 
