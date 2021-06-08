@@ -36,9 +36,28 @@ Much of the rest of the Beancount documentation can be found here:
 https://beancount.github.io/docs/
 
 
-## Copyright and License
+## License
 
-Copyright (C) 2007-2020  Martin Blais.  All Rights Reserved.
+Beangulp is distributed under the terms of the GNU GPLv2. See COPYING for details.
 
-This code is distributed under the terms of the "GNU GPLv2 only".
-See COPYING file for details.
+Author:
+
+- Martin Blais <blais@furius.ca>
+
+Contributors:
+
+- Daniele Nicolodi <daniele@grinta.net>
+- Floris Kruisselbrink <floris@vloris.nl>
+- Jakob Schnitzer <mail@jakobschnitzer.de>
+- James McCoy <jamessan@jamessan.com>
+- Johannes Harms <johannes.harms@gmx.at>
+- Jonathan Matthews <contact@jpluscplusm.com>
+- Joseph Walton <joe@kafsemo.org>
+- Lluis Pamies-Juarez <lluis@pamies.cat>
+- Martin Michlmayr <tbm@cyrius.com>
+- Matthias Wolf <m@sushinara.net>
+- Michael Droogleever <droogmic@yahoo.com>
+- Patrick Ruckstuhl <patrick@ch.tario.org>
+- Toke Høiland-Jørgensen <toke@toke.dk>
+- Jakub Jamro <kuba.jamro@gmail.com>
+- Zhuoyun Wei <wzyboy@wzyboy.org>
