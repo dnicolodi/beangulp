@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caching Data &mdash; beangulp</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/extra.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Deduplication" href="deduplication.html" />
+    <link rel="prev" title="beangulp: Importers Framework for Beancount" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> beangulp
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Caching Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#in-memory-caching">In-Memory Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#on-disk-caching">On-Disk Caching</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deduplication.html">Deduplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Importers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="porting.html">Upgrading to Newer Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">beangulp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Caching Data</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/caching.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="caching-data">
+<h1>Caching Data<a class="headerlink" href="#caching-data" title="Permalink to this headline"></a></h1>
+<p>Some of the data conversions for binary files can be costly and slow.
+This is usually the case for converting PDF files to text.  This is
+particularly painful, since in the process of ingesting our downloaded
+data we’re typically going to run the tools multiple times—at least
+twice if everything works without flaw: once to extract, twice to
+file—and usually many more times if there are problems.  For this
+reason, we want to cache these conversions, so that a painful 40
+second PDF-to-text conversion doesn’t have to be run twice, for
+example.</p>
+<p>Beancount aims to provide two levels of caching for conversions on
+downloaded files:</p>
+<ul class="simple">
+<li><p>an in-memory caching of conversions so that multiple importers
+requesting the same conversion runs them only once, and</p></li>
+<li><p>an on-disk caching of conversions so that multiple invocations of
+the tools get reused.</p></li>
+</ul>
+<section id="in-memory-caching">
+<h2>In-Memory Caching<a class="headerlink" href="#in-memory-caching" title="Permalink to this headline"></a></h2>
+<p>In-memory caching works like this: your methods receive a wrapper
+object for a given file and invoke the wrapper’s <code class="docutils literal notranslate"><span class="pre">convert()</span></code> method,
+providing a converter callable.</p>
+<p>This conversion is automatically memoized: if two importers or two
+different methods use the same converter on the file, the conversion
+is only run once.  This is a simple way of handling redundant
+conversions in-memory.  Make sure to always call those through the
+<cite>.convert()</cite> method and share the converter functions to take
+advantage of this.</p>
+</section>
+<section id="on-disk-caching">
+<h2>On-Disk Caching<a class="headerlink" href="#on-disk-caching" title="Permalink to this headline"></a></h2>
+<p>At the moment. Beancount only implements in-memory caching. On-disk
+caching will be implemented later.  Track this ticket for status
+updates.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="beangulp: Importers Framework for Beancount" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="deduplication.html" class="btn btn-neutral float-right" title="Deduplication" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

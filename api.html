@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API &mdash; beangulp</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/extra.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Upgrading to Newer Releases" href="porting.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> beangulp
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="caching.html">Caching Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deduplication.html">Deduplication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Importers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="porting.html">Upgrading to Newer Releases</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#interfaces">Interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-beangulp.testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-beangulp.importers.csvbase">CSV Importer</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">beangulp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-beangulp">
+<span id="api"></span><h1>API<a class="headerlink" href="#module-beangulp" title="Permalink to this headline"></a></h1>
+<section id="interfaces">
+<h2>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="beangulp.Importer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">beangulp.</span></span><span class="sig-name descname"><span class="pre">Importer</span></span><a class="headerlink" href="#beangulp.Importer" title="Permalink to this definition"></a></dt>
+<dd><p>Interface that all source importers need to comply with.</p>
+<p>All importers must adhere to this interface. This class provides a
+default implementation for some of the methods. Importers need to
+define at least the <a class="reference internal" href="#beangulp.Importer.identify" title="beangulp.Importer.identify"><code class="xref py py-meth docutils literal notranslate"><span class="pre">identify()</span></code></a> and <a class="reference internal" href="#beangulp.Importer.account" title="beangulp.Importer.account"><code class="xref py py-meth docutils literal notranslate"><span class="pre">account()</span></code></a>
+methods.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="beangulp.Importer.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#beangulp.Importer.name" title="Permalink to this definition"></a></dt>
+<dd><p>Unique id for the importer.</p>
+<p>The name is used to identify the importer in the command line
+interface. Conventionally this is a dotted string containing
+the module and name of the class, and this is what is returned
+if this property is not overrided in a subclass, however a
+specific format is not enforced.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="beangulp.Importer.identify">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.Importer.identify" title="Permalink to this definition"></a></dt>
+<dd><p>Return True if this importer matches the given file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> – Filesystem path to the document to be mathed.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if this importer can handle this file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="beangulp.Importer.account">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">account</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.Importer.account" title="Permalink to this definition"></a></dt>
+<dd><p>Return the account associated with the given file.</p>
+<p>The account is used to determine the archival folder for the
+document. While the interface allows returning different
+accounts for different documents, normally the returned
+account is a just a function of the importer instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> – Filesystem path to the document being imported.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An account name.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="beangulp.Importer.date">
+<span class="sig-name descname"><span class="pre">date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.Importer.date" title="Permalink to this definition"></a></dt>
+<dd><p>Return the archival date the given file.</p>
+<p>The date is used by the archive command to form the archival
+filename of the document. If this method returns None, the
+date corresponding to the file document modification time is
+used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> – Filesystem path to the document being imported.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A date object or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="beangulp.Importer.filename">
+<span class="sig-name descname"><span class="pre">filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.Importer.filename" title="Permalink to this definition"></a></dt>
+<dd><p>Return the archival filename for the given file.</p>
+<p>Tidy filenames or rename documents when archiving them. This
+method should return a valid filename or None. In the latter
+case, the file path basename is used unmodified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> – Filesystem path to the document being imported.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The document filename to use for archiving.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="beangulp.Importer.extract">
+<span class="sig-name descname"><span class="pre">extract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">existing</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.Importer.extract" title="Permalink to this definition"></a></dt>
+<dd><p>Extract transactions and other directives from a document.</p>
+<p>The existing entries list is loaded from the existing ledger
+file, if the user specified one on the command line. It can be
+used to supplement the information provided by the document
+being processed to drive the extraction. For example to derive
+the prior state of the inventory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> – Filesystem path to the document being imported.</p></li>
+<li><p><strong>existing</strong> – Entries loaded from the existing ledger.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of imported directives extracted from the document.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="beangulp.Importer.cmp">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cmp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.Importer.cmp" title="Permalink to this definition"></a></dt>
+<dd><p>Compare two entries.</p>
+<p>This function is used by the <a class="reference internal" href="#beangulp.Importer.deduplicate" title="beangulp.Importer.deduplicate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deduplicate()</span></code></a> method
+to determine if two entries are similar enough to be
+considered duplicates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – First entry.</p></li>
+<li><p><strong>b</strong> – Second entry.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the entries are deemed duplicates, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="beangulp.Importer.deduplicate">
+<span class="sig-name descname"><span class="pre">deduplicate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">existing</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.Importer.deduplicate" title="Permalink to this definition"></a></dt>
+<dd><p>Mark duplicates in extracted entries.</p>
+<p>The default implementation uses the <a class="reference internal" href="#beangulp.Importer.cmp" title="beangulp.Importer.cmp"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cmp()</span></code></a> method to
+compare each newly extracted entries to the existing
+entries. Only existing entries dated within a 5 days window
+around the date of the each existing entry (two days prior and
+two days past) are considered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entries</strong> – Entries extracted from the document being processed.</p></li>
+<li><p><strong>existing</strong> – Entries loaded from the existing ledger.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A new list of entries where duplicates have been marked
+setting the <code class="docutils literal notranslate"><span class="pre">__duplicate__</span></code> entry metadata field to True.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="beangulp.Importer.sort">
+<span class="sig-name descname"><span class="pre">sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.Importer.sort" title="Permalink to this definition"></a></dt>
+<dd><p>Sort the extracted directives.</p>
+<p>The sort is in-place and stable. The reverse flag can be set
+to sort in descending order. Importers can implement this
+method to have entries serialized to file in a specific
+order. The default implementation sorts the entries according
+to <a class="reference external" href="https://beancount.github.io/docs/api_reference/beancount.core.html#beancount.core.data.entry_sortkey" title="(in Beancount Documentation v0.0.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">beancount.core.data.entry_sortkey()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entries</strong> – Entries list to sort.</p></li>
+<li><p><strong>reverse</strong> – When True sort in descending order.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-beangulp.testing">
+<span id="testing"></span><h2>Testing<a class="headerlink" href="#module-beangulp.testing" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="beangulp.testing.main">
+<span class="sig-prename descclassname"><span class="pre">beangulp.testing.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">importer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.testing.main" title="Permalink to this definition"></a></dt>
+<dd><p>Call main program on a single importer. This is the main entry point.</p>
+</dd></dl>
+
+</section>
+<section id="module-beangulp.importers.csvbase">
+<span id="csv-importer"></span><h2>CSV Importer<a class="headerlink" href="#module-beangulp.importers.csvbase" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.CSVReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">beangulp.importers.csvbase.</span></span><span class="sig-name descname"><span class="pre">CSVReader</span></span><a class="headerlink" href="#beangulp.importers.csvbase.CSVReader" title="Permalink to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.CSVReader.encoding">
+<span class="sig-name descname"><span class="pre">encoding</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'utf8'</span></em><a class="headerlink" href="#beangulp.importers.csvbase.CSVReader.encoding" title="Permalink to this definition"></a></dt>
+<dd><p>File encoding.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.CSVReader.skiplines">
+<span class="sig-name descname"><span class="pre">skiplines</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#beangulp.importers.csvbase.CSVReader.skiplines" title="Permalink to this definition"></a></dt>
+<dd><p>Number of input lines to skip before startign processing.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.CSVReader.names">
+<span class="sig-name descname"><span class="pre">names</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#beangulp.importers.csvbase.CSVReader.names" title="Permalink to this definition"></a></dt>
+<dd><p>Whether the data file contains a row with column names.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.CSVReader.dialect">
+<span class="sig-name descname"><span class="pre">dialect</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#beangulp.importers.csvbase.CSVReader.dialect" title="Permalink to this definition"></a></dt>
+<dd><p>The CSV dialect used in the input file.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.CSVReader.comments">
+<span class="sig-name descname"><span class="pre">comments</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'#'</span></em><a class="headerlink" href="#beangulp.importers.csvbase.CSVReader.comments" title="Permalink to this definition"></a></dt>
+<dd><p>Comment character.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.CSVReader.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.importers.csvbase.CSVReader.read" title="Permalink to this definition"></a></dt>
+<dd><p>Read CSV file according to class defined columns specification.</p>
+<p>Use the first rown in the data file to resolve columns
+specification. Yield namedtuple-like objects with attribute
+accessors to access the data fields as defined by the class
+columns specification.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> – Filesystem path to the input file.</p>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><p>Namedtuple-like objects.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.Column">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">beangulp.importers.csvbase.</span></span><span class="sig-name descname"><span class="pre">Column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.importers.csvbase.Column" title="Permalink to this definition"></a></dt>
+<dd><p>Field descriptor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Column name or index.</p></li>
+<li><p><strong>default</strong> – Value to return if the field is empty.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.Column.getter">
+<span class="sig-name descname"><span class="pre">getter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">names</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.importers.csvbase.Column.getter" title="Permalink to this definition"></a></dt>
+<dd><p>Generate an attribute accessor for the column specification.</p>
+<p>The returned function is a getitem-like function that takes a
+tuple as argument and returns the value of the field described
+by the column specificaion. The function returns the field
+default value if all columns are empty. The value is parsed
+with the column parser function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>names</strong> – A dict mapping column names to column indices.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An accessor function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.Column.parse">
+<span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.importers.csvbase.Column.parse" title="Permalink to this definition"></a></dt>
+<dd><p>Parse column value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – Field string value obtained from the CSV reader.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Field parsed value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.Columns">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">beangulp.importers.csvbase.</span></span><span class="sig-name descname"><span class="pre">Columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.importers.csvbase.Columns" title="Permalink to this definition"></a></dt>
+<dd><p>Specialized Column for multiple column fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Column names or indexes.</p></li>
+<li><p><strong>sep</strong> – Separator to use to join columns.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.Date">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">beangulp.importers.csvbase.</span></span><span class="sig-name descname"><span class="pre">Date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%Y-%m-%d'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.importers.csvbase.Date" title="Permalink to this definition"></a></dt>
+<dd><p>Specialized Column descriptor for date fields.</p>
+<p>Parse strings into datetime.date objects accordingly to the
+provided format specification. The format specification is the
+same understood by <a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime.strptime" title="(in Python v3.10)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">datetime.datetime.strptime()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Column name or index.</p></li>
+<li><p><strong>frmt</strong> – Date format specification.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.Amount">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">beangulp.importers.csvbase.</span></span><span class="sig-name descname"><span class="pre">Amount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.importers.csvbase.Amount" title="Permalink to this definition"></a></dt>
+<dd><p>Specialized Column descriptor for decimal fields.</p>
+<p>Parse strings into <a class="reference external" href="https://docs.python.org/3/library/decimal.html#decimal.Decimal" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Decimal</span></code></a> objects.
+Optionally apply regexp substitutions before parsing the decimal
+number. This allows to normalize locale formatted decimal numbers
+into the format expected by the <a class="reference external" href="https://docs.python.org/3/library/decimal.html#decimal.Decimal" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">decimal.Decimal</span></code></a>
+constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Column name or index.</p></li>
+<li><p><strong>subs</strong> – Dictionary mapping regular expression patterns to
+replacement strings. Substitutions are performed with
+<a class="reference external" href="https://docs.python.org/3/library/re.html#re.sub" title="(in Python v3.10)"><code class="xref py py-func docutils literal notranslate"><span class="pre">re.sub()</span></code></a> in the order they are specified.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.Importer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">beangulp.importers.csvbase.</span></span><span class="sig-name descname"><span class="pre">Importer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">account</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.importers.csvbase.Importer" title="Permalink to this definition"></a></dt>
+<dd><p>CSV files importer base class.</p>
+<p>This class provides the infrastructure and the basic functionality
+necessary for importing transactions and balance assertions from
+CSV files. To do anything useful it needs to be subclassed to add
+fields definitions. Fields are defined as class attributes of type
+Column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>account</strong> – Importer default account.</p></li>
+<li><p><strong>currency</strong> – Importer default currency.</p></li>
+<li><p><strong>flag</strong> – Importer default flag for new transactions.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.Importer.date">
+<span class="sig-name descname"><span class="pre">date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.importers.csvbase.Importer.date" title="Permalink to this definition"></a></dt>
+<dd><p>Implements <a class="reference internal" href="#beangulp.Importer.date" title="beangulp.Importer.date"><code class="xref py py-meth docutils literal notranslate"><span class="pre">beangulp.Importer.date()</span></code></a>.</p>
+<p>Returns the latest transaction date in the input file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.Importer.account">
+<span class="sig-name descname"><span class="pre">account</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.importers.csvbase.Importer.account" title="Permalink to this definition"></a></dt>
+<dd><p>Implements <a class="reference internal" href="#beangulp.Importer.account" title="beangulp.Importer.account"><code class="xref py py-meth docutils literal notranslate"><span class="pre">beangulp.Importer.account()</span></code></a>.</p>
+<p>Returns the account name specified to the constructor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.Importer.extract">
+<span class="sig-name descname"><span class="pre">extract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">existing</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.importers.csvbase.Importer.extract" title="Permalink to this definition"></a></dt>
+<dd><p>Implements <a class="reference internal" href="#beangulp.Importer.extract" title="beangulp.Importer.extract"><code class="xref py py-meth docutils literal notranslate"><span class="pre">beangulp.Importer.extract()</span></code></a>.</p>
+<p>This methods costructs a transaction for each data row using
+the date, narration, and amount required fields and the flag,
+payee, account, currency, tag, link, balance optional fields.</p>
+<p>Transaction metadata is constructed with <a class="reference internal" href="#beangulp.importers.csvbase.Importer.metadata" title="beangulp.importers.csvbase.Importer.metadata"><code class="xref py py-meth docutils literal notranslate"><span class="pre">metadata()</span></code></a>
+and <a class="reference internal" href="#beangulp.importers.csvbase.Importer.finalize" title="beangulp.importers.csvbase.Importer.finalize"><code class="xref py py-meth docutils literal notranslate"><span class="pre">finalize()</span></code></a> is called on each transaction. These
+can be redefine in subclasses. For customization that cannot
+be implemented with these two extension points, consider
+basing the importer on <a class="reference internal" href="#beangulp.importers.csvbase.CSVReader" title="beangulp.importers.csvbase.CSVReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">CSVReader</span></code></a> and implementing
+the <a class="reference internal" href="#beangulp.Importer" title="beangulp.Importer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Importer</span></code></a> interface with tailored
+processing of the data rows.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.Importer.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.importers.csvbase.Importer.metadata" title="Permalink to this definition"></a></dt>
+<dd><p>Build transaction metadata dictionary.</p>
+<p>This method can be extended to add customized metadata
+entries based on the content of the data row.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> – Path to the file being imported.</p></li>
+<li><p><strong>lineno</strong> – Line number of the data being processed.</p></li>
+<li><p><strong>row</strong> – The data row being processed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A metadata dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="beangulp.importers.csvbase.Importer.finalize">
+<span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#beangulp.importers.csvbase.Importer.finalize" title="Permalink to this definition"></a></dt>
+<dd><p>Post process the transaction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>txn</strong> – The just build Transaction object.</p></li>
+<li><p><strong>row</strong> – The data row being processed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A potentially extended or modified Transaction object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="porting.html" class="btn btn-neutral float-left" title="Upgrading to Newer Releases" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
